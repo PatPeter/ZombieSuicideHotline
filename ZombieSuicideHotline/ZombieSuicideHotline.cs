@@ -26,6 +26,8 @@ namespace ZombieSuicideHotline
 		internal int lastRecall = 0;
 		internal bool ProcessingDisconnect = false;
 
+		internal Dictionary<Role, Vector> scpSpawns = new Dictionary<Role, Vector>();
+
 		internal Dictionary<string, Zombie> zombies = new Dictionary<string, Zombie>();
 
 		public override void OnEnable()
@@ -46,7 +48,7 @@ namespace ZombieSuicideHotline
 			this.AddEventHandler(typeof(IEventHandlerRoundEnd), new RoundEndHandler(this), Priority.Lowest);
 			this.AddEventHandler(typeof(IEventHandlerPlayerJoin), new PlayerJoinHandler(this), Priority.Lowest);
 			this.AddEventHandler(typeof(IEventHandlerDisconnect), new DisconnectHandler(this), Priority.Highest);
-			//this.AddEventHandler(typeof(IEventHandlerSpawn), new SpawnHandler(this), Priority.Lowest);
+			this.AddEventHandler(typeof(IEventHandlerSpawn), new SpawnHandler(this), Priority.Lowest);
 			this.AddEventHandler(typeof(IEventHandlerSetRole), new SetRoleHandler(this), Priority.Lowest);
 			this.AddEventHandler(typeof(IEventHandlerTeamRespawn), new TeamRespawnHandler(this), Priority.Lowest);
 			this.AddEventHandler(typeof(IEventHandlerPlayerDie), new PlayerDieHandler(this), Priority.Lowest);

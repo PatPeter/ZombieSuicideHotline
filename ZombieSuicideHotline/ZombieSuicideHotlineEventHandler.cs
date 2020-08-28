@@ -185,7 +185,7 @@ namespace ZombieSuicideHotline.EventHandlers
 	/**
 	 * 2a
 	 */
-	/*class SpawnHandler : IEventHandlerSpawn
+	class SpawnHandler : IEventHandlerSpawn
 	{
 		private ZombieSuicideHotlinePlugin plugin;
 
@@ -197,6 +197,12 @@ namespace ZombieSuicideHotline.EventHandlers
 		public void OnSpawn(PlayerSpawnEvent ev)
 		{
 			Player player = ev.Player;
+
+			if (ev.Player.TeamRole.Team == Team.SCP)
+			{
+				this.plugin.scpSpawns[ev.Player.TeamRole.Role] = ev.Player.GetPosition();
+			}
+
 			if (this.plugin.GetConfigBool("zombie_suicide_hotline_enabled"))
 			{
 				if (this.plugin.duringRound && this.plugin.zombies.ContainsKey(player.SteamId) && this.plugin.zombies[player.SteamId].Undead && player.TeamRole.Role != Role.SPECTATOR)
@@ -216,7 +222,7 @@ namespace ZombieSuicideHotline.EventHandlers
 				}
 			}
 		}
-	}*/
+	}
 
 	/**
 	 * 2a
