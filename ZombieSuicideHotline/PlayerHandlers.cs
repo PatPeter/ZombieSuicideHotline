@@ -3,9 +3,11 @@
     using Exiled.Events.EventArgs;
     using Player = Exiled.API.Features.Player;
     using Exiled.API.Features;
+    using System.Collections.Generic;
 
     public class PlayerHandlers
     {
+        IDictionary<RoleType, UnityEngine.Vector3> Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
         private readonly Plugin plugin;
         public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
 
@@ -19,6 +21,7 @@
         }
         public void OnRoundEnd()
         {
+            Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
             foreach (Player player in Exiled.API.Features.Player.List)
             {
                 if (this.plugin.zombies.ContainsKey(player.UserId))
@@ -38,6 +41,7 @@
                     ev.NewRole = RoleType.Scp0492;
                 }
             }
+            
         }
 
         public void OnPlayerSpawn(SpawningEventArgs ev)
@@ -59,6 +63,11 @@
             {
                 player.Broadcast(10, "Use .retreat to teleport to other SCPs");
             }
+
+            if (Spawns.ContainsKey(ev.RoleType) == false)
+            {
+                Spawns.Add(ev.RoleType, ev.Position);
+            };
         }
 
         public void OnPlayerDied(DiedEventArgs ev)
@@ -81,6 +90,14 @@
                     {
                         ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
                         ev.Target.Position = targetPlayer.Position;
+                    }
+                    else
+                    {
+                        if (plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
+                        {
+                            ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+                            ev.Target.Position = Spawns[(ev.Target.Role)];
+                        }
                     }
                 } 
             }
