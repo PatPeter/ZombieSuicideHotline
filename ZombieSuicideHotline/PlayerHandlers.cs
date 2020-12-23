@@ -83,20 +83,21 @@
         {
             if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
                 {
-                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString())) 
+                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
-                    Player targetPlayer = GetTeleportTarget(ev.Target);
-                    if (targetPlayer != null && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
+                    
+                    if (Warhead.IsDetonated != true && (Map.IsLCZDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
                     {
                         ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                        ev.Target.Position = targetPlayer.Position;
+                        ev.Target.Position = Spawns[(ev.Target.Role)];
                     }
                     else
                     {
-                        if (plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
+                        Player targetPlayer = GetTeleportTarget(ev.Target);
+                        if (targetPlayer != null)
                         {
                             ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                            ev.Target.Position = Spawns[(ev.Target.Role)];
+                            ev.Target.Position = targetPlayer.Position;
                         }
                     }
                 } 
