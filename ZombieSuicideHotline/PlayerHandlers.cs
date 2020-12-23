@@ -131,7 +131,32 @@
                     targetPlayer = player;
                 }
 
-                if (player.Team == Team.SCP)
+                if (player.Role == RoleType.Scp0492)
+                {
+                    targetPlayer = player;
+                }
+
+                if (player.Role == RoleType.Scp096)
+                {
+                    targetPlayer = player;
+                }
+
+                if (player.Role == RoleType.Scp106)
+                {
+                    targetPlayer = player;
+                }
+
+                if (player.Role == RoleType.Scp173)
+                {
+                    targetPlayer = player;
+                }
+
+                if (player.Role == RoleType.Scp93953)
+                {
+                    targetPlayer = player;
+                }
+
+                if (player.Role == RoleType.Scp93989)
                 {
                     targetPlayer = player;
                 }
