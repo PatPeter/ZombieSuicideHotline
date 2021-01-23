@@ -11,7 +11,7 @@
         private readonly Plugin plugin;
         public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
 
-        public void OnPlayerJoined(JoinedEventArgs ev)
+        public void OnPlayerVerified(VerifiedEventArgs ev)
         {
             Player player = ev.Player;
             if (!this.plugin.zombies.ContainsKey(ev.Player.UserId))
