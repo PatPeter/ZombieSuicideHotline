@@ -30,7 +30,7 @@ namespace ZombieSuicideHotline
             PlayerHandlers = new PlayerHandlers(this);
 
             Log.Info($"Registering EventHandlers..");
-            Player.Joined += PlayerHandlers.OnPlayerJoined;
+            Player.Verified += PlayerHandlers.OnPlayerVerified;
             Player.Died += PlayerHandlers.OnPlayerDied;
             Player.Left += PlayerHandlers.OnPlayerLeft;
             Player.Hurting += PlayerHandlers.OnPlayerHurt;
@@ -40,7 +40,7 @@ namespace ZombieSuicideHotline
         }
         public override void OnDisabled()
         {
-            Player.Joined -= PlayerHandlers.OnPlayerJoined;
+            Player.Verified -= PlayerHandlers.OnPlayerVerified;
             Player.Died -= PlayerHandlers.OnPlayerDied;
             Player.Left -= PlayerHandlers.OnPlayerLeft;
             Player.Hurting -= PlayerHandlers.OnPlayerHurt;

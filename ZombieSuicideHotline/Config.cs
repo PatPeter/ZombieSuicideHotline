@@ -14,7 +14,7 @@ namespace ZombieSuicideHotline
         [Description("How long between each use of Respawn?")]
         public float RetreatCooldown { get; set; } = 40f;
 
-        [Description("A list of classes that should beable to call the suicide hotline and what precent of their health is done")]
+        [Description("A list of classes that should be able to call the suicide hotline and what percent of their health is removed.")]
         public Dictionary<string, float> HotlineCalls { get; set; } = new Dictionary<string, float>
         {
 			{

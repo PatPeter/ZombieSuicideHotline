@@ -11,7 +11,7 @@
         private readonly Plugin plugin;
         public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
 
-        public void OnPlayerJoined(JoinedEventArgs ev)
+        public void OnPlayerVerified(VerifiedEventArgs ev)
         {
             Player player = ev.Player;
             if (!this.plugin.zombies.ContainsKey(ev.Player.UserId))
@@ -83,21 +83,27 @@
         {
             if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
                 {
-                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString())) 
+                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
                     Player targetPlayer = GetTeleportTarget(ev.Target);
-                    if (targetPlayer != null && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
+                    if (targetPlayer != null)
                     {
                         ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
                         ev.Target.Position = targetPlayer.Position;
                     }
                     else
-                    {
-                        if (plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
-                        {
-                            ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                            ev.Target.Position = Spawns[(ev.Target.Role)];
-                        }
+					{
+						// Do not warp SCP-173 back to Light Containment if decontaminated, but still apply the damage
+						if (Map.IsLCZDecontaminated && ev.Target.Role == RoleType.Scp173)
+						{
+							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+						}
+						// Should be impossible to take tesla/wall/decont damage on nuked surface, but do not risk teleporting SCPs back
+						else if (!Warhead.IsDetonated)
+						{
+							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+							ev.Target.Position = Spawns[(ev.Target.Role)];
+						}
                     }
                 } 
             }
@@ -121,15 +127,16 @@
                     continue;
                 }
 
+				// Do not teleport to computer
                 if (player.Role == RoleType.Scp079)
                 {
                     continue;
                 }
 
-                if (targetPlayer == null)
-                {
-                    targetPlayer = player;
-                }
+                //if (targetPlayer == null)
+                //{
+                //    targetPlayer = player;
+                //}
 
                 if (player.Role == RoleType.Scp0492)
                 {
