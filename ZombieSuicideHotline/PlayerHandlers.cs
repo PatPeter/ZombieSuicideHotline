@@ -81,17 +81,18 @@
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-            if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
-                {
-                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
-                {
-                    Player targetPlayer = GetTeleportTarget(ev.Target);
-                    if (targetPlayer != null)
-                    {
-                        ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                        ev.Target.Position = targetPlayer.Position;
-                    }
-                    else
+			if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Decont))
+			{
+				if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) &&
+					plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
+				{
+					Player targetPlayer = GetTeleportTarget(ev.Target);
+					if (targetPlayer != null)
+					{
+						ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+						ev.Target.Position = targetPlayer.Position;
+					}
+					else
 					{
 						// Do not warp SCP-173 back to Light Containment if decontaminated, but still apply the damage
 						if (Map.IsLCZDecontaminated && ev.Target.Role == RoleType.Scp173)
@@ -104,9 +105,37 @@
 							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
 							ev.Target.Position = Spawns[(ev.Target.Role)];
 						}
-                    }
-                } 
-            }
+					}
+				}
+			}
+			else if (ev.DamageType == DamageTypes.Wall)
+			{
+				if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) &&
+					plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1 &&
+					ev.Amount > ev.Target.Health)
+				{
+					Player targetPlayer = GetTeleportTarget(ev.Target);
+					if (targetPlayer != null)
+					{
+						ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+						ev.Target.Position = targetPlayer.Position;
+					}
+					else
+					{
+						// Do not warp SCP-173 back to Light Containment if decontaminated, but still apply the damage
+						if (Map.IsLCZDecontaminated && ev.Target.Role == RoleType.Scp173)
+						{
+							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+						}
+						// Should be impossible to take tesla/wall/decont damage on nuked surface, but do not risk teleporting SCPs back
+						else if (!Warhead.IsDetonated)
+						{
+							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+							ev.Target.Position = Spawns[(ev.Target.Role)];
+						}
+					}
+				}
+			}
         }
 
         public void OnPlayerLeft(LeftEventArgs ev)
