@@ -98,7 +98,7 @@
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-            if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
+            if ((ev.DamageType == DamageTypes.Tesla || (ev.DamageType == DamageTypes.Wall && ev.Amount > 10000) || ev.DamageType == DamageTypes.Decont))
                 {
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
