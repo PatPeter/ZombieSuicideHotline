@@ -86,7 +86,14 @@
 
         public void OnDoctorRevive(FinishingRecallEventArgs ev)
         {
-            DoctorsZombies[ev.Scp049.UserId].Add(ev.Target.UserId);
+            if(DoctorsZombies.ContainsKey(ev.Scp049.UserId))
+            {
+                DoctorsZombies[ev.Scp049.UserId].Add(ev.Target.UserId);
+            }
+            else
+            {
+                DoctorsZombies[ev.Scp049.UserId] = new List<string>{ ev.Target.UserId };
+            }
         }
 
         public void OnPlayerHurt(HurtingEventArgs ev)
