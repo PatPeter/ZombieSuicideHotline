@@ -29,7 +29,7 @@ namespace ZombieSuicideHotline
                     {
                         foreach (Player players in Exiled.API.Features.Player.List)
                         {
-                            if (players.Role == RoleType.Scp0492)
+                            if (players.Role == RoleType.Scp0492 && Plugin.Singleton.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
                             {
                                 players.Position = player.Position;
                                 response = "Zombies recalled!";

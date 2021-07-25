@@ -9,6 +9,7 @@
     {
         IDictionary<RoleType, UnityEngine.Vector3> Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
         private readonly Plugin plugin;
+        public Dictionary<string, List<string>> DoctorsZombies = new Dictionary<string, List<string>>();
         public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
 
         public void OnPlayerVerified(VerifiedEventArgs ev)
@@ -29,6 +30,7 @@
                     this.plugin.zombies[player.UserId].Disconnected = false;
                 }
             }
+            DoctorsZombies = new Dictionary<string, List<string>>();
         }
         public void OnPlayerRoleChange(ChangingRoleEventArgs ev)
         {
@@ -80,6 +82,11 @@
                     plugin.zombies[player.UserId].Disconnected = false;
                 }
             }
+        }
+
+        public void OnDoctorRevive(FinishingRecallEventArgs ev)
+        {
+            DoctorsZombies[ev.Scp049.UserId].Add(ev.Target.UserId);
         }
 
         public void OnPlayerHurt(HurtingEventArgs ev)

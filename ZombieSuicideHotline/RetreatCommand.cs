@@ -13,9 +13,9 @@ namespace ZombieSuicideHotline
     [CommandHandler(typeof(ClientCommandHandler))]
     class RetreatCommand : ICommand
     {
-        public string Command => "retreat"; //Why is this called respawn?
+        public string Command => "vent"; //Why is this called respawn?
 
-        public string[] Aliases => null;
+        public string[] Aliases => new string[] { "retreat" };
 
         public string Description => "Allows SCP-173 to teleport to other SCPs";
 
