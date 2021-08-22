@@ -69,6 +69,7 @@
             if (Spawns.ContainsKey(ev.RoleType) == false)
             {
                 Spawns.Add(ev.RoleType, ev.Position);
+                Log.Error(ev.RoleType);
             };
         }
 
@@ -103,10 +104,13 @@
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
                     
-                    if (Warhead.IsDetonated != true && (Map.IsLCZDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
+                    if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
                     {
                         ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                        ev.Target.Position = Spawns[(ev.Target.Role)];
+                        Log.Error("ran");
+                        Log.Error(ev.Target.Role);
+                        ev.Target.Position = Spawns[ev.Target.Role];
+                        Log.Error("after");
                     }
                     else
                     {
