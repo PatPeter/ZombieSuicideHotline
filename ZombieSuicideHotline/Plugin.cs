@@ -37,6 +37,7 @@ namespace ZombieSuicideHotline
             Player.ChangingRole += PlayerHandlers.OnPlayerRoleChange;
             Player.Spawning += PlayerHandlers.OnPlayerSpawn;
             Server.RoundStarted += PlayerHandlers.OnRoundEnd;
+            Exiled.Events.Handlers.Scp049.FinishingRecall += PlayerHandlers.OnDoctorRevive;
         }
         public override void OnDisabled()
         {
@@ -47,7 +48,7 @@ namespace ZombieSuicideHotline
             Player.ChangingRole -= PlayerHandlers.OnPlayerRoleChange;
             Player.Spawning -= PlayerHandlers.OnPlayerSpawn;
             Server.RoundStarted -= PlayerHandlers.OnRoundEnd;
-
+            Exiled.Events.Handlers.Scp049.FinishingRecall -= PlayerHandlers.OnDoctorRevive;
         }
     }
 

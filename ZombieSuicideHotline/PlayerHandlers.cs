@@ -10,6 +10,7 @@
     {
         IDictionary<RoleType, UnityEngine.Vector3> Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
         private readonly Plugin plugin;
+        public Dictionary<string, List<string>> DoctorsZombies = new Dictionary<string, List<string>>();
         public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
 
         public void OnPlayerVerified(VerifiedEventArgs ev)
@@ -30,6 +31,7 @@
                     this.plugin.zombies[player.UserId].Disconnected = false;
                 }
             }
+            DoctorsZombies = new Dictionary<string, List<string>>();
         }
         public void OnPlayerRoleChange(ChangingRoleEventArgs ev)
         {
@@ -62,69 +64,76 @@
             }
             if (ev.RoleType == RoleType.Scp173)
             {
-                player.Broadcast(10, "Use .vent to escape NTF fire and travel to another SCP.");
+                player.Broadcast(10, "Use .vent to teleport to other SCPs");
             }
 
             if (Spawns.ContainsKey(ev.RoleType) == false)
             {
                 Spawns.Add(ev.RoleType, ev.Position);
+                Log.Error(ev.RoleType);
             };
         }
 
         public void OnPlayerDied(DiedEventArgs ev)
         {
-			if (plugin.Config.IsEnabled)
-			{
-				Player player = ev.Target;
-				if (ev.Target.Role == RoleType.Scp0492)
-				{
-					plugin.zombies[player.UserId].Disconnected = false;
-				}
-			}
+            Player player = ev.Target;
+            if (ev.Target.Role == RoleType.Scp0492)
+            {
+                if (this.plugin.zombies.ContainsKey(player.UserId))
+                {
+                    plugin.zombies[player.UserId].Disconnected = false;
+                }
+            }
+        }
+
+        public void OnDoctorRevive(FinishingRecallEventArgs ev)
+        {
+            if(DoctorsZombies.ContainsKey(ev.Scp049.UserId))
+            {
+                DoctorsZombies[ev.Scp049.UserId].Add(ev.Target.UserId);
+            }
+            else
+            {
+                DoctorsZombies[ev.Scp049.UserId] = new List<string>{ ev.Target.UserId };
+            }
         }
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-			if (plugin.Config.IsEnabled &&
-				plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) &&
-				plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
-			{
-				if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
-				{
-					float originalAmount = ev.Amount;
-					float percentHealth = ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()];
-					Log.Debug(ev.Target.Nickname + " called the SCP Suicide Hotline and took " + Math.Min(originalAmount, percentHealth) + " damage instead of/same as " + originalAmount + " " + ev.DamageType.name + " damage.");
-					ev.Target.Broadcast(new Broadcast("You called the SCP Suicide Hotline and took " + Math.Min(originalAmount, percentHealth) + " damage instead of/same as " + originalAmount + " " + ev.DamageType.name + " damage.", 2));
-
-					Player targetPlayer = GetTeleportTarget(ev.Target);
-					if (targetPlayer != null)
-					{
-						ev.Amount = Math.Min(originalAmount, percentHealth);
-						ev.Target.Position = targetPlayer.Position;
-					}
-					else
-					{
-						// Do not warp SCP-173 back to Light Containment if decontaminated, but still apply the damage
-						if (Map.IsLCZDecontaminated && ev.Target.Role == RoleType.Scp173)
-						{
-							ev.Amount = Math.Min(originalAmount, percentHealth);
-						}
-						// Should be impossible to take tesla/wall/decont damage on nuked surface, but do not risk teleporting SCPs back
-						else if (!Warhead.IsDetonated)
-						{
-							ev.Amount = Math.Min(originalAmount, percentHealth);
-							ev.Target.Position = Spawns[(ev.Target.Role)];
-						}
-					}
-				}
-			}
+            if ((ev.DamageType == DamageTypes.Tesla || (ev.DamageType == DamageTypes.Wall && ev.Amount > 10000) || ev.DamageType == DamageTypes.Decont))
+                {
+                if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
+                {
+                    
+                    if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
+                    {
+                        ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+                        Log.Error("ran");
+                        Log.Error(ev.Target.Role);
+                        ev.Target.Position = Spawns[ev.Target.Role];
+                        Log.Error("after");
+                    }
+                    else
+                    {
+                        Player targetPlayer = GetTeleportTarget(ev.Target);
+                        if (targetPlayer != null)
+                        {
+                            ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
+                            ev.Target.Position = targetPlayer.Position;
+                        }
+                    }
+                } 
+            }
         }
 
         public void OnPlayerLeft(LeftEventArgs ev)
         {
             if (ev.Player.Role == RoleType.Scp0492)
             {
-                plugin.zombies[ev.Player.UserId].Disconnected = true;
+                if (this.plugin.zombies.ContainsKey(ev.Player.UserId))
+                {
+                    plugin.zombies[ev.Player.UserId].Disconnected = true;
+                }
             }
         }
 
