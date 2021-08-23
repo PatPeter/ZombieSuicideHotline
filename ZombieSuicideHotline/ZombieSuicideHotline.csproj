@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RetreatCommand.cs" />
+    <Compile Include="VentCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PlayerHandlers.cs" />
     <Compile Include="RecallCommand.cs" />

@@ -11,9 +11,9 @@ using UnityEngine;
 namespace ZombieSuicideHotline
 {
     [CommandHandler(typeof(ClientCommandHandler))]
-    class RetreatCommand : ICommand
+    class VentCommand : ICommand
     {
-        public string Command => "retreat"; //Why is this called respawn?
+        public string Command => "vent";
 
         public string[] Aliases => null;
 
@@ -35,7 +35,7 @@ namespace ZombieSuicideHotline
                     }
                     else
                     {
-                        response = "retreat is on cooldown for " + (Lasttime + Plugin.Singleton.Config.RetreatCooldown - Time.time).ToString();
+                        response = "vent is on cooldown for " + (Lasttime + Plugin.Singleton.Config.RetreatCooldown - Time.time).ToString();
                     }
                 }
                 if (response == "")

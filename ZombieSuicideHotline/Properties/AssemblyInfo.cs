@@ -48,6 +48,6 @@ namespace ZombieSuicideHotline
 		/// <summary>
 		/// The AssemblyFileVersion of this web part
 		/// </summary>
-		internal const string Version = "1.6.10.64";
+		internal const string Version = "1.6.11.65";
 	}
 }

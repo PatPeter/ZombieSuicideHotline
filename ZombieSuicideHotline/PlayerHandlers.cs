@@ -58,11 +58,11 @@
             }
             if (ev.RoleType == RoleType.Scp049)
             {
-                player.Broadcast(10, "Use .recall to bring all your zombies to you");
+                player.Broadcast(10, "Use .recall to bring all your zombies to you.");
             }
             if (ev.RoleType == RoleType.Scp173)
             {
-                player.Broadcast(10, "Use .retreat to teleport to other SCPs");
+                player.Broadcast(10, "Use .vent to escape NTF fire and travel to another SCP.");
             }
 
             if (Spawns.ContainsKey(ev.RoleType) == false)
@@ -73,11 +73,14 @@
 
         public void OnPlayerDied(DiedEventArgs ev)
         {
-            Player player = ev.Target;
-            if (ev.Target.Role == RoleType.Scp0492)
-            {
-                    plugin.zombies[player.UserId].Disconnected = false;
-            }
+			if (plugin.Config.IsEnabled)
+			{
+				Player player = ev.Target;
+				if (ev.Target.Role == RoleType.Scp0492)
+				{
+					plugin.zombies[player.UserId].Disconnected = false;
+				}
+			}
         }
 
         public void OnPlayerHurt(HurtingEventArgs ev)
@@ -86,11 +89,13 @@
 				plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) &&
 				plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1)
 			{
-				float originalAmount = ev.Amount;
-				float percentHealth = ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()];
-				ev.Target.Broadcast(new Broadcast("You called the Zombie Suicide Hotline and took " + Math.Min(originalAmount, percentHealth) + " damage instead of/same as " + originalAmount + " " + ev.DamageType + " damage.", 2));
 				if ((ev.DamageType == DamageTypes.Tesla || ev.DamageType == DamageTypes.Wall || ev.DamageType == DamageTypes.Decont))
 				{
+					float originalAmount = ev.Amount;
+					float percentHealth = ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()];
+					Log.Debug(ev.Target.Nickname + " called the SCP Suicide Hotline and took " + Math.Min(originalAmount, percentHealth) + " damage instead of/same as " + originalAmount + " " + ev.DamageType.name + " damage.");
+					ev.Target.Broadcast(new Broadcast("You called the SCP Suicide Hotline and took " + Math.Min(originalAmount, percentHealth) + " damage instead of/same as " + originalAmount + " " + ev.DamageType.name + " damage.", 2));
+
 					Player targetPlayer = GetTeleportTarget(ev.Target);
 					if (targetPlayer != null)
 					{
