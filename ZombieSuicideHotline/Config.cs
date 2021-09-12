@@ -8,11 +8,20 @@ namespace ZombieSuicideHotline
         [Description("Is the plugin enabled?")]
         public bool IsEnabled { get; set; } = true;
 
-		[Description("How long between each use of Recall?")]
+		[Description("Enable or disable SCP-049 using .recall to teleport zombies back.")]
+		public bool AllowRecall { get; set; } = false;
+
+		[Description("Enable or disable SCP-173 using .vent to teleport to another SCP.")]
+		public bool AllowVent { get; set; } = false;
+
+		[Description("Enable or disable respawning players who ragequit the game after being killed by SCP-049.")]
+		public bool RespawnZombieRagequits { get; set; } = false;
+
+		[Description("How long between each use of .recall?")]
 		public float RecallCooldown { get; set; } = 20f;
 
-        [Description("How long between each use of Respawn?")]
-        public float RetreatCooldown { get; set; } = 40f;
+        [Description("How long between each use of .vent?")]
+        public float VentCooldown { get; set; } = 40f;
 
         [Description("A list of classes that should be able to call the suicide hotline and what percent of their health is removed.")]
         public Dictionary<string, float> HotlineCalls { get; set; } = new Dictionary<string, float>

@@ -17,48 +17,58 @@ namespace ZombieSuicideHotline
 
         public string[] Aliases => new string[] { "retreat" };
 
-        public string Description => "Allows SCP-173 to teleport to other SCPs";
+        public string Description => "Allows SCP-173 to teleport to other SCPs.";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
-            Player player = Player.Get(((CommandSender)sender).SenderId);
-            if (player.Role == RoleType.Scp173)
-            {
-               Player ScpTpPlayer = GetTeleportTarget(player);
-                if (ScpTpPlayer != null)
-                {
-                    if (Timerfunc())
-                    {
-                        player.Position = ScpTpPlayer.Position;
-                        response = "Excaped!";
-                    }
-                    else
-                    {
-                        response = "vent is on cooldown for " + (Lasttime + Plugin.Singleton.Config.RetreatCooldown - Time.time).ToString();
-                    }
-                }
-                if (response == "")
-                {
-                    response = "No alive SCPs!";
-                }
-            }
-            else
-            {
-                response = "You must be SCP 173 to use this command!";
-            }
-            return true;
-        }
-        public float Lasttime = 0;
-        public bool Timerfunc()
+			if (Plugin.Singleton.Config.AllowVent)
+			{
+				Player player = Player.Get(((CommandSender)sender).SenderId);
+				if (player.Role == RoleType.Scp173)
+				{
+					Player ScpTpPlayer = GetTeleportTarget(player);
+					if (ScpTpPlayer != null)
+					{
+						if (TimerFunction())
+						{
+							player.Position = ScpTpPlayer.Position;
+							response = "Excaped!";
+						}
+						else
+						{
+							response = "vent is on cooldown for " + (LastTime + Plugin.Singleton.Config.VentCooldown - Time.time).ToString();
+						}
+					}
+					if (response == "")
+					{
+						response = "No alive SCPs!";
+					}
+				}
+				else
+				{
+					response = "You must be SCP 173 to use this command!";
+				}
+			}
+			else
+			{
+				response = ".vent is not enabled.";
+			}
+			return true;
+		}
+
+        public float LastTime = 0;
+
+        public bool TimerFunction()
         {
-            if (Lasttime + Plugin.Singleton.Config.RetreatCooldown < Time.time)
+            if (LastTime + Plugin.Singleton.Config.VentCooldown < Time.time)
             {
-                Lasttime = Time.time;
+                LastTime = Time.time;
                 return true;
             }
             return false;
         }
+
         public Player GetTeleportTarget(Player sourcePlayer)
         {
             Player targetPlayer = null;

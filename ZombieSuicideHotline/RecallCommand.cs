@@ -17,46 +17,55 @@ namespace ZombieSuicideHotline
 
         public string[] Aliases => null;
 
-        public string Description => "Allows you to bring all zombies to you as SCP 049";
+        public string Description => "Allows you to bring all zombies to you as SCP-049.";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
-            Player player = Player.Get(((CommandSender)sender).SenderId);
-                if (player.Role == RoleType.Scp049)
-                {
-                    if (Timerfunc())
-                    {
-                        foreach (Player players in Exiled.API.Features.Player.List)
-                        {
-                            if (players.Role == RoleType.Scp0492 && Plugin.Singleton.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
-                            {
-                                players.Position = player.Position;
-                                response = "Zombies recalled!";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        response = "Recall is on cooldown for " + (Lasttime + Plugin.Singleton.Config.RecallCooldown - Time.time).ToString();
-                    }
-                    if (response == "")
-                    {
-                        response = "No alive Zombies!";
-                    }
-                }
-                else
-                {
-                    response = "You must be SCP 049 to use this command!";
-                }
+			if (Plugin.Singleton.Config.AllowVent)
+			{
+				Player player = Player.Get(((CommandSender)sender).SenderId);
+				if (player.Role == RoleType.Scp049)
+				{
+					if (TimerFunction())
+					{
+						foreach (Player players in Exiled.API.Features.Player.List)
+						{
+							if (players.Role == RoleType.Scp0492 && Plugin.Singleton.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
+							{
+								players.Position = player.Position;
+								response = "Zombies recalled!";
+							}
+						}
+					}
+					else
+					{
+						response = "Recall is on cooldown for " + (LastTime + Plugin.Singleton.Config.RecallCooldown - Time.time).ToString();
+					}
+					if (response == "")
+					{
+						response = "No alive Zombies!";
+					}
+				}
+				else
+				{
+					response = "You must be SCP 049 to use this command!";
+				}
+			}
+			else
+			{
+				response = ".recall is not enabled.";
+			}
             return true;
         }
-        public float Lasttime = 0;
-        public bool Timerfunc()
+
+        public float LastTime = 0;
+
+        public bool TimerFunction()
         {
-            if (Lasttime + Plugin.Singleton.Config.RecallCooldown < Time.time)
+            if (LastTime + Plugin.Singleton.Config.RecallCooldown < Time.time)
             {
-                Lasttime = Time.time;
+                LastTime = Time.time;
                 return true;
             }
             return false;

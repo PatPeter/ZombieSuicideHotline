@@ -40,8 +40,9 @@ namespace ZombieSuicideHotline
             Exiled.Events.Handlers.Scp049.FinishingRecall += PlayerHandlers.OnDoctorRevive;
         }
         public override void OnDisabled()
-        {
-            Player.Verified -= PlayerHandlers.OnPlayerVerified;
+		{
+			Log.Info($"Unregistering EventHandlers..");
+			Player.Verified -= PlayerHandlers.OnPlayerVerified;
             Player.Died -= PlayerHandlers.OnPlayerDied;
             Player.Left -= PlayerHandlers.OnPlayerLeft;
             Player.Hurting -= PlayerHandlers.OnPlayerHurt;
