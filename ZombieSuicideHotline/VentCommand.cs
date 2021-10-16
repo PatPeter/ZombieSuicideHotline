@@ -84,6 +84,11 @@ namespace ZombieSuicideHotline
                     continue;
                 }
 
+                if (player.Role == RoleType.Scp106)
+                {
+	                continue;
+                }
+
                 if (player.Team == Team.SCP)
                 {
                     targetPlayer = player;
