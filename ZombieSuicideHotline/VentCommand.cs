@@ -33,7 +33,7 @@ namespace ZombieSuicideHotline
 						if (TimerFunction())
 						{
 							player.Position = ScpTpPlayer.Position;
-							response = "Excaped!";
+							response = "Escaped!";
 						}
 						else
 						{
