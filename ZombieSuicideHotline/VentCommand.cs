@@ -32,7 +32,7 @@ namespace ZombieSuicideHotline
 					{
 						if (TimerFunction())
 						{
-							player.Position = ScpTpPlayer.Position;
+							player.Position = ScpTpPlayer.ReferenceHub.playerMovementSync.LastSafePosition;
 							response = "Excaped!";
 						}
 						else
@@ -86,7 +86,10 @@ namespace ZombieSuicideHotline
 
                 if (player.Role == RoleType.Scp106)
                 {
-	                continue;
+                    if (player.GameObject.GetComponent<Scp106PlayerScript>().goingViaThePortal)
+                    {
+                        continue;
+                    }
                 }
 
                 if (player.Team == Team.SCP)
