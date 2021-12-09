@@ -22,7 +22,7 @@ namespace ZombieSuicideHotline
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
-			if (Plugin.Singleton.Config.AllowVent)
+			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
 				if (player.Role == RoleType.Scp173)
@@ -32,12 +32,12 @@ namespace ZombieSuicideHotline
 					{
 						if (TimerFunction())
 						{
-							player.Position = ScpTpPlayer.ReferenceHub.playerMovementSync.LastSafePosition;
-							response = "Excaped!";
+							player.Position = ScpTpPlayer.Position;
+							response = "Escaped!";
 						}
 						else
 						{
-							response = "vent is on cooldown for " + (LastTime + Plugin.Singleton.Config.VentCooldown - Time.time).ToString();
+							response = "vent is on cooldown for " + (LastTime + Plugin.Instance.Config.VentCooldown - Time.time).ToString();
 						}
 					}
 					if (response == "")
@@ -61,7 +61,7 @@ namespace ZombieSuicideHotline
 
         public bool TimerFunction()
         {
-            if (LastTime + Plugin.Singleton.Config.VentCooldown < Time.time)
+            if (LastTime + Plugin.Instance.Config.VentCooldown < Time.time)
             {
                 LastTime = Time.time;
                 return true;

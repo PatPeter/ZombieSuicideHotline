@@ -22,7 +22,7 @@ namespace ZombieSuicideHotline
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
-			if (Plugin.Singleton.Config.AllowVent)
+			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
 				if (player.Role == RoleType.Scp049)
@@ -31,7 +31,7 @@ namespace ZombieSuicideHotline
 					{
 						foreach (Player players in Exiled.API.Features.Player.List)
 						{
-							if (players.Role == RoleType.Scp0492 && Plugin.Singleton.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
+							if (players.Role == RoleType.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
 							{
 								players.Position = player.Position;
 								response = "Zombies recalled!";
@@ -40,7 +40,7 @@ namespace ZombieSuicideHotline
 					}
 					else
 					{
-						response = "Recall is on cooldown for " + (LastTime + Plugin.Singleton.Config.RecallCooldown - Time.time).ToString();
+						response = "Recall is on cooldown for " + (LastTime + Plugin.Instance.Config.RecallCooldown - Time.time).ToString();
 					}
 					if (response == "")
 					{
@@ -63,7 +63,7 @@ namespace ZombieSuicideHotline
 
         public bool TimerFunction()
         {
-            if (LastTime + Plugin.Singleton.Config.RecallCooldown < Time.time)
+            if (LastTime + Plugin.Instance.Config.RecallCooldown < Time.time)
             {
                 LastTime = Time.time;
                 return true;

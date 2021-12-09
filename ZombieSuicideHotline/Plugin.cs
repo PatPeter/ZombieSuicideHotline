@@ -3,29 +3,30 @@ using System.Collections.Generic;
 
 namespace ZombieSuicideHotline
 {
+	using Exiled.API.Enums;
 	using Exiled.API.Features;
 	using UnityEngine;
 	using Player = Exiled.Events.Handlers.Player;
 	using Server = Exiled.Events.Handlers.Server;
 
 	public class Plugin : Plugin<Config>
-    {
-        public override string Name { get; } = ZombieSuicideHotline.AssemblyInfo.Name;
+	{
+		public static Plugin Instance { get; } = new Plugin();
+
+		public override string Name { get; } = ZombieSuicideHotline.AssemblyInfo.Name;
         public override string Author { get; } = ZombieSuicideHotline.AssemblyInfo.Author;
         public override Version Version { get; } = new Version(ZombieSuicideHotline.AssemblyInfo.Version);
-        //public override Version RequiredExiledVersion { get; } = new Version(2, 0, 12);
         public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.ConfigPrefix;
+		public override Version RequiredExiledVersion { get; } = new Version(4, 0, 12);
+		public override PluginPriority Priority { get; } = PluginPriority.Default;
 
-        public PlayerHandlers PlayerHandlers;
-        public Dictionary<string, Zombie> zombies = new Dictionary<string, Zombie>();
-        public static Plugin Singleton;
+		public PlayerHandlers PlayerHandlers;
+        public Dictionary<string, Zombie> Zombies = new Dictionary<string, Zombie>();
 
-		internal Dictionary<RoleType, Vector3> scpSpawns = new Dictionary<RoleType, Vector3>();
+		internal Dictionary<RoleType, Vector3> ScpSpawns = new Dictionary<RoleType, Vector3>();
 
 		public override void OnEnabled()
         {
-            Singleton = this;
-
             Log.Info($"Instantiating Events..");
             PlayerHandlers = new PlayerHandlers(this);
 

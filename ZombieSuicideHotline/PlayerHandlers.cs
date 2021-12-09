@@ -16,9 +16,9 @@
         public void OnPlayerVerified(VerifiedEventArgs ev)
         {
             Player player = ev.Player;
-            if (!this.plugin.zombies.ContainsKey(ev.Player.UserId))
+            if (!this.plugin.Zombies.ContainsKey(ev.Player.UserId))
             {
-                this.plugin.zombies[ev.Player.UserId] = new Zombie(player.Id, player.Nickname, player.UserId, player.IPAddress);
+                this.plugin.Zombies[ev.Player.UserId] = new Zombie(player.Id, player.Nickname, player.UserId, player.IPAddress);
             }
         }
 
@@ -27,9 +27,9 @@
             Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
             foreach (Player player in Exiled.API.Features.Player.List)
             {
-                if (this.plugin.zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+                if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
                 {
-                    this.plugin.zombies[player.UserId].Disconnected = false;
+                    this.plugin.Zombies[player.UserId].Disconnected = false;
                 }
             }
             DoctorsZombies = new Dictionary<string, List<string>>();
@@ -38,11 +38,11 @@
         public void OnPlayerRoleChange(ChangingRoleEventArgs ev)
         {
             Player player = ev.Player;
-            if  (this.plugin.zombies.ContainsKey(player.UserId))
+            if  (this.plugin.Zombies.ContainsKey(player.UserId))
             {
-                if (plugin.zombies[player.UserId].Disconnected && this.plugin.Config.RespawnZombieRagequits)
+                if (plugin.Zombies[player.UserId].Disconnected && this.plugin.Config.RespawnZombieRagequits)
                 {
-                    plugin.zombies[player.UserId].Disconnected = false;
+                    plugin.Zombies[player.UserId].Disconnected = false;
                     ev.NewRole = RoleType.Scp0492;
                 }
             }
@@ -79,9 +79,9 @@
             Player player = ev.Target;
             if (ev.Target.Role == RoleType.Scp0492)
             {
-                if (this.plugin.zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+                if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
                 {
-                    plugin.zombies[player.UserId].Disconnected = false;
+                    plugin.Zombies[player.UserId].Disconnected = false;
                 }
             }
         }
@@ -128,9 +128,9 @@
         {
             if (ev.Player.Role == RoleType.Scp0492)
             {
-                if (this.plugin.zombies.ContainsKey(ev.Player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+                if (this.plugin.Zombies.ContainsKey(ev.Player.UserId) && this.plugin.Config.RespawnZombieRagequits)
                 {
-                    plugin.zombies[ev.Player.UserId].Disconnected = true;
+                    plugin.Zombies[ev.Player.UserId].Disconnected = true;
                 }
             }
         }
