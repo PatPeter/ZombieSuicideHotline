@@ -14,9 +14,9 @@ namespace ZombieSuicideHotline
 		public static Plugin Instance { get; } = new Plugin();
 
 		public override string Name { get; } = ZombieSuicideHotline.AssemblyInfo.Name;
-        public override string Author { get; } = ZombieSuicideHotline.AssemblyInfo.Author;
-        public override Version Version { get; } = new Version(ZombieSuicideHotline.AssemblyInfo.Version);
-        public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.ConfigPrefix;
+		public override string Author { get; } = ZombieSuicideHotline.AssemblyInfo.Author;
+		public override Version Version { get; } = new Version(ZombieSuicideHotline.AssemblyInfo.Version);
+		public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.LangFile;
 		public override Version RequiredExiledVersion { get; } = new Version(4, 0, 12);
 		public override PluginPriority Priority { get; } = PluginPriority.Default;
 
