@@ -100,7 +100,7 @@
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-            if ((ev.DamageType == DamageTypes.Tesla || (ev.DamageType == DamageTypes.Wall && ev.Amount > 10000) || ev.DamageType == DamageTypes.Decont))
+            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed && ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
                 {
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
