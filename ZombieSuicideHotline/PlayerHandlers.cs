@@ -117,7 +117,7 @@
                         if (targetPlayer != null)
                         {
                             ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-                            ev.Target.Position = targetPlayer.Position;
+                            ev.Target.Position = targetPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
                         }
                     }
                 } 
