@@ -84,6 +84,11 @@
                     plugin.Zombies[player.UserId].Disconnected = false;
                 }
             }
+
+			if (ev.Target.Team == Team.SCP)
+			{
+				Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
+			}
         }
 
         public void OnDoctorRevive(FinishingRecallEventArgs ev)
