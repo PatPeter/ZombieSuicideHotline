@@ -34,7 +34,7 @@ namespace ZombieSuicideHotline
 
             Log.Info($"Registering EventHandlers..");
             Player.Verified += PlayerHandlers.OnPlayerVerified;
-            Player.Died += PlayerHandlers.OnPlayerDied;
+            Player.Dying += PlayerHandlers.OnPlayerDying;
             Player.Left += PlayerHandlers.OnPlayerLeft;
             Player.Hurting += PlayerHandlers.OnPlayerHurt;
             Player.ChangingRole += PlayerHandlers.OnPlayerRoleChange;
@@ -46,8 +46,8 @@ namespace ZombieSuicideHotline
 		{
 			Log.Info($"Unregistering EventHandlers..");
 			Player.Verified -= PlayerHandlers.OnPlayerVerified;
-            Player.Died -= PlayerHandlers.OnPlayerDied;
-            Player.Left -= PlayerHandlers.OnPlayerLeft;
+			Player.Dying -= PlayerHandlers.OnPlayerDying;
+			Player.Left -= PlayerHandlers.OnPlayerLeft;
             Player.Hurting -= PlayerHandlers.OnPlayerHurt;
             Player.ChangingRole -= PlayerHandlers.OnPlayerRoleChange;
             Player.Spawning -= PlayerHandlers.OnPlayerSpawn;

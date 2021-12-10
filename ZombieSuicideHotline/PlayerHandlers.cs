@@ -74,23 +74,6 @@
             };
         }
 
-        public void OnPlayerDied(DiedEventArgs ev)
-        {
-            Player player = ev.Target;
-            if (ev.Target.Role == RoleType.Scp0492)
-            {
-                if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
-                {
-                    plugin.Zombies[player.UserId].Disconnected = false;
-                }
-            }
-
-			if (ev.Target.Team == Team.SCP)
-			{
-				Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
-			}
-        }
-
         public void OnDoctorRevive(FinishingRecallEventArgs ev)
         {
             if(DoctorsZombies.ContainsKey(ev.Scp049.UserId))
@@ -105,6 +88,11 @@
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
+			if (ev.Attacker == null || ev.Target == null)
+			{
+				return;
+			}
+
             if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Handler.Type == Exiled.API.Enums.DamageType.Falldown && ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
                 {
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
@@ -127,9 +115,31 @@
                     }
                 } 
             }
-        }
+		}
 
-        public void OnPlayerLeft(LeftEventArgs ev)
+		public void OnPlayerDying(DyingEventArgs ev)
+		{
+			if (ev.Killer == null || ev.Target == null)
+			{
+				return;
+			}
+
+			Player player = ev.Target;
+			if (ev.Target.Role == RoleType.Scp0492)
+			{
+				if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+				{
+					plugin.Zombies[player.UserId].Disconnected = false;
+				}
+			}
+
+			if (ev.Target.Team == Team.SCP)
+			{
+				Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
+			}
+		}
+
+		public void OnPlayerLeft(LeftEventArgs ev)
         {
             if (ev.Player.Role == RoleType.Scp0492)
             {
