@@ -93,8 +93,7 @@
                 return;
             }
             
-            //ev.Handler.Type == Exiled.API.Enums.DamageType.Falldown && 
-            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
+            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed && ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
             {
                 Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Amount}...");
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
@@ -125,18 +124,14 @@
                 return;
             }
 
-            Player player = ev.Target;
+			Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
+			Player player = ev.Target;
             if (ev.Target.Role == RoleType.Scp0492)
             {
                 if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
                 {
                     plugin.Zombies[player.UserId].Disconnected = false;
                 }
-            }
-
-            if (ev.Target.Team == Team.SCP)
-            {
-                Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
             }
         }
 
