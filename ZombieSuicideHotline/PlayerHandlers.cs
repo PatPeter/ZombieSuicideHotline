@@ -4,9 +4,9 @@
     using Player = Exiled.API.Features.Player;
     using Exiled.API.Features;
     using System.Collections.Generic;
-	using System;
+    using System;
 
-	public class PlayerHandlers
+    public class PlayerHandlers
     {
         IDictionary<RoleType, UnityEngine.Vector3> Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
         private readonly Plugin plugin;
@@ -88,15 +88,15 @@
 
         public void OnPlayerHurt(HurtingEventArgs ev)
         {
-			if (ev.Attacker == null || ev.Target == null)
-			{
-				return;
-			}
-			
-			//ev.Handler.Type == Exiled.API.Enums.DamageType.Falldown && 
-			if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
+            if (ev.Attacker == null || ev.Target == null)
             {
-				Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Amount}...");
+                return;
+            }
+            
+            //ev.Handler.Type == Exiled.API.Enums.DamageType.Falldown && 
+            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Amount > 10000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
+            {
+                Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Amount}...");
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
                     if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
@@ -116,31 +116,31 @@
                     }
                 } 
             }
-		}
+        }
 
-		public void OnPlayerDying(DyingEventArgs ev)
-		{
-			if (ev.Killer == null || ev.Target == null)
-			{
-				return;
-			}
+        public void OnPlayerDying(DyingEventArgs ev)
+        {
+            if (ev.Killer == null || ev.Target == null)
+            {
+                return;
+            }
 
-			Player player = ev.Target;
-			if (ev.Target.Role == RoleType.Scp0492)
-			{
-				if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
-				{
-					plugin.Zombies[player.UserId].Disconnected = false;
-				}
-			}
+            Player player = ev.Target;
+            if (ev.Target.Role == RoleType.Scp0492)
+            {
+                if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+                {
+                    plugin.Zombies[player.UserId].Disconnected = false;
+                }
+            }
 
-			if (ev.Target.Team == Team.SCP)
-			{
-				Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
-			}
-		}
+            if (ev.Target.Team == Team.SCP)
+            {
+                Log.Debug($"SCP died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
+            }
+        }
 
-		public void OnPlayerLeft(LeftEventArgs ev)
+        public void OnPlayerLeft(LeftEventArgs ev)
         {
             if (ev.Player.Role == RoleType.Scp0492)
             {
@@ -161,7 +161,7 @@
                     continue;
                 }
 
-				// Do not teleport to computer
+                // Do not teleport to computer
                 if (player.Role == RoleType.Scp079)
                 {
                     continue;

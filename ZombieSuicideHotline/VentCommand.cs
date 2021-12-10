@@ -22,40 +22,40 @@ namespace ZombieSuicideHotline
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
-			if (Plugin.Instance.Config.AllowVent)
-			{
-				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleType.Scp173)
-				{
-					Player ScpTpPlayer = GetTeleportTarget(player);
-					if (ScpTpPlayer != null)
-					{
-						if (TimerFunction())
-						{
-							player.Position = ScpTpPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
-							response = "Escaped!";
-						}
-						else
-						{
-							response = "vent is on cooldown for " + (LastTime + Plugin.Instance.Config.VentCooldown - Time.time).ToString();
-						}
-					}
-					if (response == "")
-					{
-						response = "No alive SCPs!";
-					}
-				}
-				else
-				{
-					response = "You must be SCP 173 to use this command!";
-				}
-			}
-			else
-			{
-				response = ".vent is not enabled.";
-			}
-			return true;
-		}
+            if (Plugin.Instance.Config.AllowVent)
+            {
+                Player player = Player.Get(((CommandSender)sender).SenderId);
+                if (player.Role == RoleType.Scp173)
+                {
+                    Player ScpTpPlayer = GetTeleportTarget(player);
+                    if (ScpTpPlayer != null)
+                    {
+                        if (TimerFunction())
+                        {
+                            player.Position = ScpTpPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
+                            response = "Escaped!";
+                        }
+                        else
+                        {
+                            response = "vent is on cooldown for " + (LastTime + Plugin.Instance.Config.VentCooldown - Time.time).ToString();
+                        }
+                    }
+                    if (response == "")
+                    {
+                        response = "No alive SCPs!";
+                    }
+                }
+                else
+                {
+                    response = "You must be SCP 173 to use this command!";
+                }
+            }
+            else
+            {
+                response = ".vent is not enabled.";
+            }
+            return true;
+        }
 
         public float LastTime = 0;
 
