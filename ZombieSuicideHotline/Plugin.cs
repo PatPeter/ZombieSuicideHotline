@@ -11,12 +11,12 @@ namespace ZombieSuicideHotline
 
 	public class Plugin : Plugin<Config>
 	{
-		public static Plugin Instance { get; } = new Plugin();
+		public static Plugin Instance { get; set; } = null;
 
 		public override string Name { get; } = ZombieSuicideHotline.AssemblyInfo.Name;
 		public override string Author { get; } = ZombieSuicideHotline.AssemblyInfo.Author;
 		public override Version Version { get; } = new Version(ZombieSuicideHotline.AssemblyInfo.Version);
-		public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.LangFile;
+		public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.ConfigPrefix;
 		public override Version RequiredExiledVersion { get; } = new Version(4, 0, 12);
 		public override PluginPriority Priority { get; } = PluginPriority.Default;
 
@@ -27,6 +27,8 @@ namespace ZombieSuicideHotline
 
 		public override void OnEnabled()
         {
+			Instance = this;
+
             Log.Info($"Instantiating Events..");
             PlayerHandlers = new PlayerHandlers(this);
 

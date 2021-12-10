@@ -42,12 +42,11 @@ namespace ZombieSuicideHotline
 		internal const string Name = "ZombieSuicideHotline";
 		internal const string Description = "Plugin that prevents SCP-049-2 and other SCPs from committing suicide.";
 		internal const string Id = "patpeter.zombie.suicide.hotline";
-		internal const string ConfigPrefix = "zsh";
-		internal const string LangFile = "zombie_suicide_hotline";
+		internal const string ConfigPrefix = "zombie_suicide_hotline";
 
 		/// <summary>
 		/// The AssemblyFileVersion of this web part
 		/// </summary>
-		internal const string Version = "1.7.3";
+		internal const string Version = "1.7.5";
 	}
 }
