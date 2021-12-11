@@ -93,7 +93,7 @@
                 return;
             }
             
-            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed && ev.Amount > 1000) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
+            if ((ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || (ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed && ev.Amount == -1) || ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination))
             {
                 Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Amount}...");
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
