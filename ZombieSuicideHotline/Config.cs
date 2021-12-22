@@ -14,6 +14,12 @@ namespace ZombieSuicideHotline
 		[Description("Enable or disable SCP-173 using .vent to teleport to another SCP.")]
 		public bool AllowVent { get; set; } = false;
 
+		[Description("Enable or disable SCPs using .Unstuck to teleport to spawn.")]
+		public bool AllowUnstuck { get; set; } = false;
+
+		[Description("Time till Unstuck")]
+		public int UnstuckTime { get; set; } = 300;
+
 		[Description("Enable or disable respawning players who ragequit the game after being killed by SCP-049.")]
 		public bool RespawnZombieRagequits { get; set; } = false;
 
