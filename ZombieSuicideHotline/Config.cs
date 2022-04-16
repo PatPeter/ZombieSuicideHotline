@@ -17,19 +17,19 @@ namespace ZombieSuicideHotline
 		[Description("Enable or disable SCPs using .Unstuck to teleport to spawn.")]
 		public bool AllowUnstuck { get; set; } = false;
 
-		[Description("Time till Unstuck")]
-		public int UnstuckTime { get; set; } = 300;
-
 		[Description("Enable or disable respawning players who ragequit the game after being killed by SCP-049.")]
 		public bool RespawnZombieRagequits { get; set; } = false;
 
-		[Description("How long between each use of .recall?")]
-		public float RecallCooldown { get; set; } = 20f;
+		[Description("How many seconds between each use of .recall?")]
+		public float RecallCooldown { get; set; } = 120f;
 
-        [Description("How long between each use of .vent?")]
-        public float VentCooldown { get; set; } = 40f;
+        [Description("How many seconds between each use of .vent?")]
+        public float VentCooldown { get; set; } = 300f;
 
-        [Description("A list of classes that should be able to call the suicide hotline and what percent of their health is removed.")]
+		[Description("How long does a player need to be in the same room in order to be considered stuck?")]
+		public int UnstuckTime { get; set; } = 300;
+
+		[Description("A list of classes that should be able to call the suicide hotline and what percent of their health is removed.")]
         public Dictionary<string, float> HotlineCalls { get; set; } = new Dictionary<string, float>
         {
 			{

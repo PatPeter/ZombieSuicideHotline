@@ -39,11 +39,12 @@ namespace ZombieSuicideHotline
             }
             else
             {
-                response = ".Stuck is not enabled.";
+                response = ".stuck is not enabled.";
                 return false;
             }
             return true;
         }
+
         public IEnumerator<float> UnstuckPlayer(Player player, Room room)
         {
             int timer = 0;
@@ -54,12 +55,12 @@ namespace ZombieSuicideHotline
                 timer += 10;
                 if (player.CurrentRoom != room)
                 {
-                    player.Broadcast(5, "You have left the room, Unstuck canceled");
+                    player.Broadcast(5, "You have left the room, unstuck canceled.");
                     leftroom = true;
                     break;
                 }
             }
-            if(!leftroom)
+            if (!leftroom)
             {
                 player.Position = player.Role.GetRandomSpawnProperties().Item1;
             }

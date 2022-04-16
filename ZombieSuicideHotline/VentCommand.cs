@@ -19,7 +19,9 @@ namespace ZombieSuicideHotline
 
         public string Description => "Allows SCP-173 to teleport to other SCPs.";
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+		public float LastTime = 0;
+
+		public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = "";
             if (Plugin.Instance.Config.AllowVent)
@@ -56,8 +58,6 @@ namespace ZombieSuicideHotline
             }
             return true;
         }
-
-        public float LastTime = 0;
 
         public bool TimerFunction()
         {
