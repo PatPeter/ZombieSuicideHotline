@@ -17,7 +17,7 @@ namespace ZombieSuicideHotline
         public override string Author { get; } = ZombieSuicideHotline.AssemblyInfo.Author;
         public override Version Version { get; } = new Version(ZombieSuicideHotline.AssemblyInfo.Version);
         public override string Prefix { get; } = ZombieSuicideHotline.AssemblyInfo.ConfigPrefix;
-        public override Version RequiredExiledVersion { get; } = new Version(4, 0, 12);
+        public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
         public override PluginPriority Priority { get; } = PluginPriority.Default;
 
         public PlayerHandlers PlayerHandlers;

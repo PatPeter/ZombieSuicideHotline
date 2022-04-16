@@ -98,7 +98,7 @@
       <HintPath>..\..\References\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-      <HintPath>..\..\References\dependencies\YamlDotNet.dll</HintPath>
+      <HintPath>..\..\References\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
