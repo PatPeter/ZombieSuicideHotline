@@ -97,7 +97,7 @@
 				ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed || 
 				ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination)
             {
-                Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Amount}...");
+                Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Damage}...");
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
                 {
                     if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
@@ -125,7 +125,7 @@
                 return;
             }
 
-			Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Amount} damage.");
+			Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Damage} damage.");
 			Player player = ev.Target;
             if (ev.Target.Role == RoleType.Scp0492)
             {

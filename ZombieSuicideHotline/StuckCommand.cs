@@ -62,7 +62,7 @@ namespace ZombieSuicideHotline
             }
             if (!leftroom)
             {
-                player.Position = player.Role.GetRandomSpawnProperties().Item1;
+                player.Position = player.Role.Type.GetRandomSpawnProperties().Item1;
             }
         }
 

@@ -92,7 +92,7 @@ namespace ZombieSuicideHotline
                     }
                 }
 
-                if (player.Team == Team.SCP)
+                if (player.Role.Team == Team.SCP)
                 {
                     targetPlayer = player;
                     break;
