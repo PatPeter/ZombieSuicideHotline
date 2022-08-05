@@ -15,7 +15,7 @@ namespace ZombieSuicideHotline
     {
         public string Command => "vent";
 
-        public string[] Aliases => new string[] { "retreat" };
+        public string[] Aliases => new string[] { "retreat", "amogus" };
 
         public string Description => "Allows SCP-173 to teleport to other SCPs.";
 

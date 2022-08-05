@@ -15,7 +15,7 @@ namespace ZombieSuicideHotline
     {
         public string Command => "recall";
 
-        public string[] Aliases => null;
+        public string[] Aliases => new string[] { "rc" };
 
         public string Description => "Allows you to bring all zombies to you as SCP-049.";
 
@@ -49,7 +49,7 @@ namespace ZombieSuicideHotline
                 }
                 else
                 {
-                    response = "You must be SCP 049 to use this command!";
+                    response = "You must be SCP-049 to use this command!";
                 }
             }
             else
