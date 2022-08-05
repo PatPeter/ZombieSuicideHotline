@@ -14,11 +14,25 @@ namespace ZombieSuicideHotline
 		[Description("Enable or disable SCP-173 using .vent to teleport to another SCP.")]
 		public bool AllowVent { get; set; } = false;
 
-		[Description("Enable or disable SCPs using .Unstuck to teleport to spawn.")]
+		[Description("Enable or disable SCPs using .unstuck to teleport to spawn.")]
 		public bool AllowUnstuck { get; set; } = false;
 
 		[Description("Enable or disable respawning players who ragequit the game after being killed by SCP-049.")]
 		public bool RespawnZombieRagequits { get; set; } = false;
+
+		[Description("How many seconds between each command?")]
+		public Dictionary<string, float> CommandCooldowns { get; set; } = new Dictionary<string, float>
+		{
+			{
+				"recall", 120f
+			},
+			{
+				"vent", 120f
+			},
+			{
+				"unstuck", 120f
+			},
+		};
 
 		[Description("How many seconds between each use of .recall?")]
 		public float RecallCooldown { get; set; } = 120f;

@@ -105,11 +105,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StuckCommand.cs" />
-    <Compile Include="VentCommand.cs" />
+    <Compile Include="Commands\MetzitzahBPehCommand.cs" />
+    <Compile Include="Commands\PassoverCommand.cs" />
+    <Compile Include="Commands\StuckCommand.cs" />
+    <Compile Include="Commands\VentCommand.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PlayerHandlers.cs" />
-    <Compile Include="RecallCommand.cs" />
+    <Compile Include="Commands\RecallCommand.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,6 +5,7 @@
     using Exiled.API.Features;
     using System.Collections.Generic;
     using System;
+    using System.Linq;
 
     public class PlayerHandlers
     {
@@ -84,6 +85,14 @@
             {
                 DoctorsZombies[ev.Scp049.UserId] = new List<string>{ ev.Target.UserId };
             }
+
+            foreach (Player zombie in Exiled.API.Features.Player.List)
+            {
+                if (zombie.Role == RoleType.Scp0492)
+                {
+                    zombie.Heal(50, true);
+                }
+            }
         }
 
         public void OnPlayerHurt(HurtingEventArgs ev)
@@ -94,8 +103,8 @@
             }
             
             if (ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || 
-				ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed || 
-				ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination)
+                ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed || 
+                ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination)
             {
                 Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Damage}...");
                 if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
@@ -125,13 +134,21 @@
                 return;
             }
 
-			Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Damage} damage.");
-			Player player = ev.Target;
+            Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Damage} damage.");
+            Player player = ev.Target;
             if (ev.Target.Role == RoleType.Scp0492)
             {
                 if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
                 {
                     plugin.Zombies[player.UserId].Disconnected = false;
+                }
+
+                if (DoctorsZombies.Keys.Count > 0) {
+                    Player scp049 = Exiled.API.Features.Player.List.Where(z => z.UserId == DoctorsZombies.Keys.First()).First();
+                    if (scp049 != null)
+                    {
+                        scp049.Broadcast(new Broadcast($"Your son {ev.Target.Nickname} has been circumcised by the {ev.Killer.Role.Team}!", 3));
+                    }
                 }
             }
         }
