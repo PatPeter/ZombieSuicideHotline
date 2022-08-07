@@ -46,6 +46,12 @@ namespace ZombieSuicideHotline
 			},
 		};
 
+		[Description("Bonus health to give to all SCP-049-2 when a new SCP-049-2 is converted, per SCP-049. Stacks with bonus_revive_health_per_zombie.")]
+		public int BonusReviveHealth { get; set; } = 100;
+
+		[Description("Bonus health to give to all SCP-049-2 based on how many SCP-049-2 are alive. Stacks with bonus_revive_health.")]
+		public int BonusReviveHealthPerZombie { get; set; } = 25;
+
 		[Description("How many seconds between each use of .recall?")]
 		public float RecallCooldown { get; set; } = 120f;
 

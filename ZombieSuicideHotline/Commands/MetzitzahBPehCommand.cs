@@ -33,18 +33,20 @@ namespace ZombieSuicideHotline.Commands
 						{
 							if (ply.Role == RoleType.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(ply.UserId))
 							{
-								float tempHealth = player.Health * (Plugin.Instance.Config.MetzitzahBPehPercentage / 100);
+								float tempHealth = ply.Health * ((float) Plugin.Instance.Config.MetzitzahBPehPercentage / 100);
 								ply.Hurt(tempHealth);
 								player.Heal(tempHealth);
 								totalHealthGained += tempHealth;
 								response = $"You've become a mohel and gained {totalHealthGained} from circumcising your zombies and sucking their penis blood!";
 							}
 						}
+						Log.Info($"{player.Nickname} ran .{Command} and gained {totalHealthGained} HP.");
 					}
 					else
 					{
 						response = $"{Command} is on cooldown for " + (LastTime + Plugin.Instance.Config.CommandCooldowns[Command] - Time.time).ToString();
 					}
+
 					if (response == "")
 					{
 						response = "No alive Zombies!";
@@ -57,7 +59,7 @@ namespace ZombieSuicideHotline.Commands
 			}
 			else
 			{
-				response = ".{Command} is not enabled.";
+				response = $".{Command} is not enabled.";
 			}
 			return true;
 		}
