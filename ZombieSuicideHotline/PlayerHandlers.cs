@@ -62,7 +62,7 @@
 			}
 			if (ev.RoleType == RoleType.Scp049)
 			{
-				player.Broadcast(10, $"Press ~ and type .recall to bring all your zombies to you. Type .passover to kill your firstborn SCP-049-2 and absorb his health. Type .mbp to circumcise your SCP-049-2 and suck their blood for {Plugin.Instance.Config.MetzitzahBPehPercentage}% health each.");
+				player.Broadcast(10, $"<size=16>Press ~ and type .recall to bring all your zombies to you. Type .passover to kill your firstborn SCP-049-2 and absorb his health. Type .mbp to circumcise your SCP-049-2 and suck their blood for {Plugin.Instance.Config.MetzitzahBPehPercentage}% health each.</size>");
 			}
 			if (ev.RoleType == RoleType.Scp173)
 			{
@@ -90,7 +90,7 @@
 			{
 				if (zombie.Role == RoleType.Scp0492 && DoctorsZombies[ev.Scp049.UserId].Any(uid => uid == zombie.UserId))
 				{
-					int healthBonus = Plugin.Instance.Config.BonusReviveHealth + (Plugin.Instance.Config.BonusReviveHealth * DoctorsZombies[ev.Scp049.UserId].Count);
+					int healthBonus = Plugin.Instance.Config.BonusReviveHealth + (Plugin.Instance.Config.PerZombieBonusHealth * DoctorsZombies[ev.Scp049.UserId].Count);
 					zombie.Heal(healthBonus, true);
 					zombie.Broadcast(new Broadcast($"You've been given {healthBonus} health because the doctor now has {DoctorsZombies[ev.Scp049.UserId].Count} zombies alive.", 3));
 				}

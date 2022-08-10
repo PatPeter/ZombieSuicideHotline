@@ -47,10 +47,10 @@ namespace ZombieSuicideHotline
 		};
 
 		[Description("Bonus health to give to all SCP-049-2 when a new SCP-049-2 is converted, per SCP-049. Stacks with bonus_revive_health_per_zombie.")]
-		public int BonusReviveHealth { get; set; } = 100;
+		public int BonusReviveHealth { get; set; } = 50;
 
 		[Description("Bonus health to give to all SCP-049-2 based on how many SCP-049-2 are alive. Stacks with bonus_revive_health.")]
-		public int BonusReviveHealthPerZombie { get; set; } = 25;
+		public int PerZombieBonusHealth { get; set; } = 25;
 
 		[Description("How many seconds between each use of .recall?")]
 		public float RecallCooldown { get; set; } = 120f;
@@ -59,7 +59,7 @@ namespace ZombieSuicideHotline
 		public float VentCooldown { get; set; } = 300f;
 
 		[Description("What percentage should be lifestolen?")]
-		public int MetzitzahBPehPercentage { get; set; } = 25;
+		public int MetzitzahBPehPercentage { get; set; } = 10;
 
 		[Description("How long does a player need to be in the same room in order to be considered stuck?")]
 		public int UnstuckTime { get; set; } = 300;

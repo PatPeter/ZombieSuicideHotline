@@ -35,7 +35,7 @@ namespace ZombieSuicideHotline.Commands
 							{
 								float tempHealth = ply.Health * ((float) Plugin.Instance.Config.MetzitzahBPehPercentage / 100);
 								ply.Hurt(tempHealth);
-								player.Heal(tempHealth);
+								player.Heal(tempHealth, true);
 								totalHealthGained += tempHealth;
 								response = $"You've become a mohel and gained {totalHealthGained} from circumcising your zombies and sucking their penis blood!";
 							}
