@@ -6,10 +6,13 @@
 	using System.Collections.Generic;
 	using System;
 	using System.Linq;
+	using Exiled.Events.EventArgs.Player;
+	using PlayerRoles;
+	using Exiled.Events.EventArgs.Scp049;
 
 	public class PlayerHandlers
 	{
-		IDictionary<RoleType, UnityEngine.Vector3> Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
+		IDictionary<RoleTypeId, UnityEngine.Vector3> Spawns = new Dictionary<RoleTypeId, UnityEngine.Vector3>();
 		private readonly Plugin plugin;
 		public Dictionary<string, List<string>> DoctorsZombies = new Dictionary<string, List<string>>();
 		public PlayerHandlers(Plugin plugin) => this.plugin = plugin;
@@ -25,7 +28,7 @@
 
 		public void OnRoundEnd()
 		{
-			Spawns = new Dictionary<RoleType, UnityEngine.Vector3>();
+			Spawns = new Dictionary<RoleTypeId, UnityEngine.Vector3>();
 			foreach (Player player in Exiled.API.Features.Player.List)
 			{
 				if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
@@ -44,7 +47,7 @@
 				if (plugin.Zombies[player.UserId].Disconnected && this.plugin.Config.RespawnZombieRagequits)
 				{
 					plugin.Zombies[player.UserId].Disconnected = false;
-					ev.NewRole = RoleType.Scp0492;
+					ev.NewRole = RoleTypeId.Scp0492;
 				}
 			}
 		}
@@ -52,7 +55,8 @@
 		public void OnPlayerSpawn(SpawningEventArgs ev)
 		{
 			Player player = ev.Player;
-			if (ev.RoleType == RoleType.Scp0492)
+			RoleTypeId role = ev.Player.Role;
+			if (ev.Player.Role == RoleTypeId.Scp0492)
 			{
 				Player targetPlayer = GetTeleportTarget(player);
 				if (targetPlayer != null)
@@ -60,69 +64,70 @@
 					ev.Position = targetPlayer.Position;
 				}
 			}
-			if (ev.RoleType == RoleType.Scp049)
+			if (role == RoleTypeId.Scp049)
 			{
 				player.Broadcast(10, $"<size=16>Press ~ and type .recall to bring all your zombies to you. Type .passover to kill your firstborn SCP-049-2 and absorb his health. Type .mbp to circumcise your SCP-049-2 and suck their blood for {Plugin.Instance.Config.MetzitzahBPehPercentage}% health each.</size>");
 			}
-			if (ev.RoleType == RoleType.Scp173)
+			if (ev.Player.Role == RoleTypeId.Scp173)
 			{
 				player.Broadcast(10, "Press ~ and type .vent to teleport to other SCPs.");
 			}
 
-			if (Spawns.ContainsKey(ev.RoleType) == false)
+			if (Spawns.ContainsKey(ev.Player.Role) == false)
 			{
-				Spawns.Add(ev.RoleType, ev.Position);
+				Spawns.Add(ev.Player.Role, ev.Position);
 			};
 		}
 
 		public void OnDoctorRevive(FinishingRecallEventArgs ev)
 		{
-			if(DoctorsZombies.ContainsKey(ev.Scp049.UserId))
+			if(DoctorsZombies.ContainsKey(ev.Player.UserId))
 			{
-				DoctorsZombies[ev.Scp049.UserId].Add(ev.Target.UserId);
+				DoctorsZombies[ev.Player.UserId].Add(ev.Target.UserId);
 			}
 			else
 			{
-				DoctorsZombies[ev.Scp049.UserId] = new List<string>{ ev.Target.UserId };
+				DoctorsZombies[ev.Player.UserId] = new List<string>{ ev.Target.UserId };
 			}
 
 			foreach (Player zombie in Exiled.API.Features.Player.List)
 			{
-				if (zombie.Role == RoleType.Scp0492 && DoctorsZombies[ev.Scp049.UserId].Any(uid => uid == zombie.UserId))
+				if (zombie.Role == RoleTypeId.Scp0492 && DoctorsZombies[ev.Player.UserId].Any(uid => uid == zombie.UserId))
 				{
-					int healthBonus = Plugin.Instance.Config.BonusReviveHealth + (Plugin.Instance.Config.PerZombieBonusHealth * DoctorsZombies[ev.Scp049.UserId].Count);
+					int healthBonus = Plugin.Instance.Config.BonusReviveHealth + (Plugin.Instance.Config.PerZombieBonusHealth * DoctorsZombies[ev.Player.UserId].Count);
 					zombie.Heal(healthBonus, true);
-					zombie.Broadcast(new Broadcast($"You've been given {healthBonus} health because the doctor now has {DoctorsZombies[ev.Scp049.UserId].Count} zombies alive.", 3));
+					zombie.Broadcast(new Broadcast($"You've been given {healthBonus} health because the doctor now has {DoctorsZombies[ev.Player.UserId].Count} zombies alive.", 3));
 				}
 			}
 		}
 
 		public void OnPlayerHurt(HurtingEventArgs ev)
 		{
-			if (ev.Target == null)
+			Player target = ev.Player;
+			if (target == null)
 			{
 				return;
 			}
 			
-			if (ev.Handler.Type == Exiled.API.Enums.DamageType.Tesla || 
-				ev.Handler.Type == Exiled.API.Enums.DamageType.Crushed || 
-				ev.Handler.Type == Exiled.API.Enums.DamageType.Decontamination)
+			if (ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Tesla || 
+				ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Crushed || 
+				ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Decontamination)
 			{
-				Log.Debug($"Checking damage type {ev.Handler.Type} damage {ev.Handler.Damage}...");
-				if (plugin.Config.HotlineCalls.ContainsKey(ev.Target.Role.ToString()) && plugin.Config.HotlineCalls[ev.Target.Role.ToString()] != -1) 
+				Log.Debug($"Checking damage type {ev.DamageHandler.Type} damage {ev.DamageHandler.Damage}...");
+				if (plugin.Config.HotlineCalls.ContainsKey(ev.Player.Role.ToString()) && plugin.Config.HotlineCalls[ev.Player.Role.ToString()] != -1) 
 				{
-					if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Target.Role != RoleType.Scp173) && ev.Target.Role != RoleType.Scp0492)
+					if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Player.Role != RoleTypeId.Scp173) && ev.Player.Role != RoleTypeId.Scp0492)
 					{
-						ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-						ev.Target.Position = Spawns[ev.Target.Role];
+						ev.Amount = (ev.Player.Health * plugin.Config.HotlineCalls[ev.Player.Role.ToString()]);
+						ev.Player.Position = Spawns[ev.Player.Role];
 					}
 					else
 					{
-						Player targetPlayer = GetTeleportTarget(ev.Target);
+						Player targetPlayer = GetTeleportTarget(ev.Player);
 						if (targetPlayer != null)
 						{
-							ev.Amount = (ev.Target.Health * plugin.Config.HotlineCalls[ev.Target.Role.ToString()]);
-							ev.Target.Position = targetPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
+							ev.Amount = (target.Health * plugin.Config.HotlineCalls[ev.Player.Role.ToString()]);
+							target.Position = targetPlayer.Position; // targetPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
 						}
 					}
 				} 
@@ -131,14 +136,16 @@
 
 		public void OnPlayerDying(DyingEventArgs ev)
 		{
-			if (ev.Target == null)
+			Player target = ev.Player;
+			if (target == null)
 			{
 				return;
 			}
 
-			Log.Info($"Player {ev.Target.Nickname} playing {ev.Target.Role} died to {ev.Handler.Type} after taking {ev.Handler.Damage} damage.");
-			Player player = ev.Target;
-			if (ev.Target.Role == RoleType.Scp0492)
+			Player attacker = ev.Attacker;
+			Player player = ev.Player;
+			Log.Info($"Player {ev.Player.Nickname} playing {ev.Player.Role} died to {ev.DamageHandler.Type} after taking {ev.DamageHandler.Damage} damage.");
+			if (target.Role == RoleTypeId.Scp0492)
 			{
 				if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
 				{
@@ -149,7 +156,7 @@
 					Player scp049 = Exiled.API.Features.Player.List.Where(z => z.UserId == DoctorsZombies.Keys.First()).First();
 					if (scp049 != null)
 					{
-						scp049.Broadcast(new Broadcast($"Your son {ev.Target.Nickname} has been circumcised by the {ev.Killer.Role.Team}!", 3));
+						scp049.Broadcast(new Broadcast($"Your son {player.Nickname} has been circumcised by the {attacker.Role.Team}!", 3));
 					}
 				}
 			}
@@ -157,7 +164,7 @@
 
 		public void OnPlayerLeft(LeftEventArgs ev)
 		{
-			if (ev.Player.Role == RoleType.Scp0492)
+			if (ev.Player.Role == RoleTypeId.Scp0492)
 			{
 				if (this.plugin.Zombies.ContainsKey(ev.Player.UserId) && this.plugin.Config.RespawnZombieRagequits)
 				{
@@ -177,7 +184,7 @@
 				}
 
 				// Do not teleport to computer
-				if (player.Role == RoleType.Scp079)
+				if (player.Role == RoleTypeId.Scp079)
 				{
 					continue;
 				}
@@ -187,37 +194,32 @@
 				//	targetPlayer = player;
 				//}
 
-				if (player.Role == RoleType.Scp0492)
+				if (player.Role == RoleTypeId.Scp0492)
 				{
 					targetPlayer = player;
 				}
 
-				if (player.Role == RoleType.Scp096)
+				if (player.Role == RoleTypeId.Scp096)
 				{
 					targetPlayer = player;
 				}
 
-				if (player.Role == RoleType.Scp106)
+				if (player.Role == RoleTypeId.Scp106)
 				{
 					targetPlayer = player;
 				}
 
-				if (player.Role == RoleType.Scp173)
+				if (player.Role == RoleTypeId.Scp173)
 				{
 					targetPlayer = player;
 				}
 
-				if (player.Role == RoleType.Scp93953)
+				if (player.Role == RoleTypeId.Scp939)
 				{
 					targetPlayer = player;
 				}
 
-				if (player.Role == RoleType.Scp93989)
-				{
-					targetPlayer = player;
-				}
-
-				if (player.Role == RoleType.Scp049)
+				if (player.Role == RoleTypeId.Scp049)
 				{
 					targetPlayer = player;
 					break;

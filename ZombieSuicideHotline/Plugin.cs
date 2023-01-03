@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exiled.API.Enums;
+using Exiled.API.Features;
+using PlayerRoles;
+using UnityEngine;
+using Player = Exiled.Events.Handlers.Player;
+using Server = Exiled.Events.Handlers.Server;
 
 namespace ZombieSuicideHotline
 {
-	using Exiled.API.Enums;
-	using Exiled.API.Features;
-	using UnityEngine;
-	using Player = Exiled.Events.Handlers.Player;
-	using Server = Exiled.Events.Handlers.Server;
-
 	public class Plugin : Plugin<Config>
 	{
 		public static Plugin Instance { get; set; } = new Plugin();
@@ -23,7 +23,7 @@ namespace ZombieSuicideHotline
 		public PlayerHandlers PlayerHandlers;
 		public Dictionary<string, Zombie> Zombies = new Dictionary<string, Zombie>();
 
-		internal Dictionary<RoleType, Vector3> ScpSpawns = new Dictionary<RoleType, Vector3>();
+		internal Dictionary<RoleTypeId, Vector3> ScpSpawns = new Dictionary<RoleTypeId, Vector3>();
 
 		
 

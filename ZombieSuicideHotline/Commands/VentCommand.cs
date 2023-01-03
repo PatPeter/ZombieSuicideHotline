@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommandSystem;
 using Exiled.API.Features;
+using PlayerRoles;
 using RemoteAdmin;
 using UnityEngine;
 
@@ -27,14 +28,14 @@ namespace ZombieSuicideHotline
 			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleType.Scp173)
+				if (player.Role == RoleTypeId.Scp173)
 				{
 					Player ScpTpPlayer = GetTeleportTarget(player);
 					if (ScpTpPlayer != null)
 					{
 						if (TimerFunction())
 						{
-							player.Position = ScpTpPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
+							player.Position = ScpTpPlayer.Position; //ScpTpPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
 							response = "Escaped!";
 						}
 						else
@@ -79,20 +80,20 @@ namespace ZombieSuicideHotline
 					continue;
 				}
 
-				if (player.Role == RoleType.Scp079)
+				if (player.Role == RoleTypeId.Scp079)
 				{
 					continue;
 				}
 
-				if (player.Role == RoleType.Scp106)
+				if (player.Role.Is(out Exiled.API.Features.Roles.Scp106Role scp106Role))
 				{
-					if (player.GameObject.GetComponent<Scp106PlayerScript>().goingViaThePortal)
+					if (scp106Role.IsSubmerged)
 					{
 						continue;
 					}
 				}
 
-				if (player.Role.Team == Team.SCP)
+				if (player.Role.Team == Team.SCPs)
 				{
 					targetPlayer = player;
 					break;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommandSystem;
 using Exiled.API.Features;
+using PlayerRoles;
 using RemoteAdmin;
 using UnityEngine;
 
@@ -25,13 +26,13 @@ namespace ZombieSuicideHotline
 			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleType.Scp049)
+				if (player.Role == RoleTypeId.Scp049)
 				{
 					if (TimerFunction())
 					{
 						foreach (Player players in Exiled.API.Features.Player.List)
 						{
-							if (players.Role == RoleType.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
+							if (players.Role == RoleTypeId.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
 							{
 								players.Position = player.Position;
 								response = "Zombies recalled!";

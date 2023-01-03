@@ -8,6 +8,9 @@ namespace ZombieSuicideHotline
 		[Description("Is the plugin enabled?")]
 		public bool IsEnabled { get; set; } = true;
 
+		[Description("Enable debugging?")]
+		public bool Debug { get; set; } = false;
+
 		[Description("Enable or disable SCP-049 using .recall to teleport zombies back.")]
 		public bool AllowRecall { get; set; } = false;
 

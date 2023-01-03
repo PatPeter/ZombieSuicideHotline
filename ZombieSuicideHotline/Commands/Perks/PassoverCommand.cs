@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using PlayerRoles;
 
-namespace ZombieSuicideHotline.Commands
+namespace ZombieSuicideHotline.Commands.Perks
 {
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class PassoverCommand : ICommand
@@ -24,7 +25,7 @@ namespace ZombieSuicideHotline.Commands
 			if (Plugin.Instance.Config.AllowPassover)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleType.Scp049)
+				if (player.Role == RoleTypeId.Scp049)
 				{
 					if (TimerFunction())
 					{
