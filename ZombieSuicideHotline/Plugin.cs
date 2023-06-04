@@ -25,8 +25,6 @@ namespace ZombieSuicideHotline
 
 		internal Dictionary<RoleTypeId, Vector3> ScpSpawns = new Dictionary<RoleTypeId, Vector3>();
 
-		
-
 		private Plugin() { }
 
 		public override void OnEnabled()

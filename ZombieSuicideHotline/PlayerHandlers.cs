@@ -9,6 +9,7 @@
 	using Exiled.Events.EventArgs.Player;
 	using PlayerRoles;
 	using Exiled.Events.EventArgs.Scp049;
+	using Exiled.API.Features.DamageHandlers;
 
 	public class PlayerHandlers
 	{
@@ -106,6 +107,7 @@
 			Player target = ev.Player;
 			if (target == null)
 			{
+				Log.Error("[OnPlayerHurt] Target of hurt was null in zombie event.");
 				return;
 			}
 			
@@ -114,19 +116,19 @@
 				ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Decontamination)
 			{
 				Log.Debug($"Checking damage type {ev.DamageHandler.Type} damage {ev.DamageHandler.Damage}...");
-				if (plugin.Config.HotlineCalls.ContainsKey(ev.Player.Role.ToString()) && plugin.Config.HotlineCalls[ev.Player.Role.ToString()] != -1) 
+				if (plugin.Config.HotlineCalls.ContainsKey(target.Role.ToString()) && plugin.Config.HotlineCalls[target.Role.ToString()] != -1) 
 				{
-					if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || ev.Player.Role != RoleTypeId.Scp173) && ev.Player.Role != RoleTypeId.Scp0492)
+					if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || target.Role != RoleTypeId.Scp173) && target.Role != RoleTypeId.Scp0492)
 					{
-						ev.Amount = (ev.Player.Health * plugin.Config.HotlineCalls[ev.Player.Role.ToString()]);
-						ev.Player.Position = Spawns[ev.Player.Role];
+						ev.Amount = (target.Health * plugin.Config.HotlineCalls[target.Role.ToString()]);
+						target.Position = Spawns[target.Role];
 					}
 					else
 					{
-						Player targetPlayer = GetTeleportTarget(ev.Player);
+						Player targetPlayer = GetTeleportTarget(target);
 						if (targetPlayer != null)
 						{
-							ev.Amount = (target.Health * plugin.Config.HotlineCalls[ev.Player.Role.ToString()]);
+							ev.Amount = (target.Health * plugin.Config.HotlineCalls[target.Role.ToString()]);
 							target.Position = targetPlayer.Position; // targetPlayer.ReferenceHub.playerMovementSync.LastGroundedPosition;
 						}
 					}
@@ -139,24 +141,25 @@
 			Player target = ev.Player;
 			if (target == null)
 			{
+				Log.Error("[OnPlayerDying] Target of death was null in zombie event.");
 				return;
 			}
-
 			Player attacker = ev.Attacker;
-			Player player = ev.Player;
-			Log.Info($"Player {ev.Player.Nickname} playing {ev.Player.Role} died to {ev.DamageHandler.Type} after taking {ev.DamageHandler.Damage} damage.");
+			CustomDamageHandler dh = ev.DamageHandler;
+
+			Log.Info($"Player {target.Nickname} playing {target.Role} died to {dh.Type} after taking {dh.Damage} damage.");
 			if (target.Role == RoleTypeId.Scp0492)
 			{
-				if (this.plugin.Zombies.ContainsKey(player.UserId) && this.plugin.Config.RespawnZombieRagequits)
+				if (this.plugin.Zombies.ContainsKey(target.UserId) && this.plugin.Config.RespawnZombieRagequits)
 				{
-					plugin.Zombies[player.UserId].Disconnected = false;
+					plugin.Zombies[target.UserId].Disconnected = false;
 				}
 
 				if (DoctorsZombies.Keys.Count > 0) {
 					Player scp049 = Exiled.API.Features.Player.List.Where(z => z.UserId == DoctorsZombies.Keys.First()).First();
-					if (scp049 != null)
+					if (scp049 != null && attacker != null)
 					{
-						scp049.Broadcast(new Broadcast($"Your son {player.Nickname} has been circumcised by the {attacker.Role.Team}!", 3));
+						scp049.Broadcast(new Broadcast($"Your son {target.Nickname} has been circumcised by the {attacker.Role.Team}!", 3));
 					}
 				}
 			}
