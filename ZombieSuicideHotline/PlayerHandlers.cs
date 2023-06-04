@@ -111,13 +111,26 @@
 				return;
 			}
 			
+			if (Plugin.Instance.Config.Debug)
+			{
+				Log.Debug($"[OnPlayerHurt] Checking damage type {ev.DamageHandler.Type} damage {ev.DamageHandler.Damage}...");
+			}
 			if (ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Tesla || 
 				ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Crushed || 
 				ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Decontamination)
 			{
-				Log.Debug($"Checking damage type {ev.DamageHandler.Type} damage {ev.DamageHandler.Damage}...");
+				if (Plugin.Instance.Config.Debug)
+				{
+					Log.Debug($"[OnPlayerHurt] Damage type is {Exiled.API.Enums.DamageType.Tesla}, {Exiled.API.Enums.DamageType.Crushed}, or {Exiled.API.Enums.DamageType.Decontamination}.");
+				}
+
 				if (plugin.Config.HotlineCalls.ContainsKey(target.Role.Type.ToString()) && plugin.Config.HotlineCalls[target.Role.Type.ToString()] != -1) 
 				{
+					if (Plugin.Instance.Config.Debug)
+					{
+						Log.Debug($"[OnPlayerHurt] Hotline has been called for {target.Role.Type} at {plugin.Config.HotlineCalls[target.Role.Type.ToString()]}% reduced damage.");
+					}
+
 					if (Warhead.IsDetonated != true && (Map.IsLczDecontaminated != true || target.Role.Type != RoleTypeId.Scp173) && target.Role.Type != RoleTypeId.Scp0492)
 					{
 						ev.Amount = (target.Health * plugin.Config.HotlineCalls[target.Role.Type.ToString()]);
@@ -147,7 +160,7 @@
 			Player attacker = ev.Attacker;
 			CustomDamageHandler dh = ev.DamageHandler;
 
-			Log.Info($"Player {target.Nickname} playing {target.Role.Type} died to {dh.Type} after taking {dh.Damage} damage.");
+			Log.Info($"[OnPlayerDying] Player {target.Nickname} playing {target.Role.Type} died to {dh.Type} after taking {dh.Damage} damage.");
 			if (target.Role.Type == RoleTypeId.Scp0492)
 			{
 				if (this.plugin.Zombies.ContainsKey(target.UserId) && this.plugin.Config.RespawnZombieRagequits)
