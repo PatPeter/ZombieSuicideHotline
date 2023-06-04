@@ -28,7 +28,7 @@ namespace ZombieSuicideHotline
 			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleTypeId.Scp173)
+				if (player.Role.Type == RoleTypeId.Scp173)
 				{
 					Player ScpTpPlayer = GetTeleportTarget(player);
 					if (ScpTpPlayer != null)
@@ -80,7 +80,7 @@ namespace ZombieSuicideHotline
 					continue;
 				}
 
-				if (player.Role == RoleTypeId.Scp079)
+				if (player.Role.Type == RoleTypeId.Scp079)
 				{
 					continue;
 				}

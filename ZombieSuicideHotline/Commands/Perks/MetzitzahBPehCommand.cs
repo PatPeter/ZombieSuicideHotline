@@ -25,14 +25,14 @@ namespace ZombieSuicideHotline.Commands.Perks
 			if (Plugin.Instance.Config.AllowMetzitzahBPeh)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleTypeId.Scp049)
+				if (player.Role.Type == RoleTypeId.Scp049)
 				{
 					if (TimerFunction())
 					{
 						float totalHealthGained = 0f;
 						foreach (Player ply in Exiled.API.Features.Player.List)
 						{
-							if (ply.Role == RoleTypeId.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(ply.UserId))
+							if (ply.Role.Type == RoleTypeId.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(ply.UserId))
 							{
 								float tempHealth = ply.Health * ((float) Plugin.Instance.Config.MetzitzahBPehPercentage / 100);
 								ply.Hurt(tempHealth);

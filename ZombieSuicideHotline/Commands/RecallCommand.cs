@@ -26,13 +26,13 @@ namespace ZombieSuicideHotline
 			if (Plugin.Instance.Config.AllowVent)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleTypeId.Scp049)
+				if (player.Role.Type == RoleTypeId.Scp049)
 				{
 					if (TimerFunction())
 					{
 						foreach (Player players in Exiled.API.Features.Player.List)
 						{
-							if (players.Role == RoleTypeId.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
+							if (players.Role.Type == RoleTypeId.Scp0492 && Plugin.Instance.PlayerHandlers.DoctorsZombies[player.UserId].Contains(players.UserId))
 							{
 								players.Position = player.Position;
 								response = "Zombies recalled!";

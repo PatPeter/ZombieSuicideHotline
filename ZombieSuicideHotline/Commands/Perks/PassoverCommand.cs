@@ -25,7 +25,7 @@ namespace ZombieSuicideHotline.Commands.Perks
 			if (Plugin.Instance.Config.AllowPassover)
 			{
 				Player player = Player.Get(((CommandSender)sender).SenderId);
-				if (player.Role == RoleTypeId.Scp049)
+				if (player.Role.Type == RoleTypeId.Scp049)
 				{
 					if (TimerFunction())
 					{
