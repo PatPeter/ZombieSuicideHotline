@@ -15,6 +15,7 @@ namespace ZombieSuicideHotline
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class StuckCommmand : ICommand
 	{
+		public bool SanitizeResponse => false;
 		public string Command => "Stuck";
 
 		public string[] Aliases => new string[] { "unstuck" };

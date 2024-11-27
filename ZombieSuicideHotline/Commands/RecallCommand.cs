@@ -14,6 +14,7 @@ namespace ZombieSuicideHotline
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class RecallCommand : ICommand
 	{
+		public bool SanitizeResponse => false;
 		public string Command => "recall";
 
 		public string[] Aliases => new string[] { "rc" };

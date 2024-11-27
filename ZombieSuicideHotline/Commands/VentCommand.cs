@@ -14,6 +14,7 @@ namespace ZombieSuicideHotline
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class VentCommand : ICommand
 	{
+		public bool SanitizeResponse => false;
 		public string Command => "vent";
 
 		public string[] Aliases => new string[] { "retreat", "amogus" };

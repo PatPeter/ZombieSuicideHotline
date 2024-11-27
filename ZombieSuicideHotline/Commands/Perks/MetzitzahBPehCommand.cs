@@ -13,6 +13,8 @@ namespace ZombieSuicideHotline.Commands.Perks
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class MetzitzahBPehCommand : ICommand
 	{
+		public bool SanitizeResponse => false;
+
 		public string Command => "metzitzahbpeh";
 
 		public string[] Aliases => new string[] { "mbp" };

@@ -13,6 +13,7 @@ namespace ZombieSuicideHotline.Commands.Perks
 	[CommandHandler(typeof(ClientCommandHandler))]
 	class PassoverCommand : ICommand
 	{
+		public bool SanitizeResponse => false;
 		public string Command => "passover";
 
 		public string[] Aliases => new string[] { "po" };
