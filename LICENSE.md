@@ -1,7 +1,7 @@
 Modified BSD License
 ====================
 
-_Copyright © 2019-2025, Nicholas Solin a.k.a. [PatPeter](https://github.com/PatPeter)_
+_Copyright © 2018-2025, Nicholas Solin a.k.a. [PatPeter](https://github.com/PatPeter)_
 _Copyright © 2021-2022, [babyboucher](https://github.com/babyboucher)_
 _All rights reserved._
 
